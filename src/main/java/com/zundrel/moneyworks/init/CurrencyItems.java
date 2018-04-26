@@ -25,18 +25,15 @@ public class CurrencyItems {
         IForgeRegistry<Item> registry = event.getRegistry();
 
         try {
-            for (Currency currency : CurrencyParser.parse(Moneyworks.preevent)) {
-                for (String name : currency.getDenominations().keySet()) {
-                    Denomination denomination = currency.getDenominations().get(name);
+            Currency currency = CurrencyParser.parse(Moneyworks.preevent);
 
-                    registerItem(registry, new ItemMoney(currency, denomination.getValue()), name);
-                }
+            for (String name : currency.getDenominations().keySet()) {
+                Denomination denomination = currency.getDenominations().get(name);
+                registerItem(registry, new ItemMoney(currency, denomination.getValue()), name);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //registerItem(registry, penny, "penny");
     }
 
     private static ResourceLocation registerItem(IForgeRegistry<Item> registry, Item item, String name) {

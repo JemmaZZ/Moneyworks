@@ -2,18 +2,20 @@ package com.zundrel.moneyworks.init;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import com.zundrel.moneyworks.Moneyworks;
+import com.zundrel.moneyworks.api.MoneyModel;
 import com.zundrel.moneyworks.api.Currency;
 import com.zundrel.moneyworks.api.Denomination;
-import net.minecraft.util.ResourceLocation;
+import com.zundrel.moneyworks.api.Location;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.io.*;
+import java.net.URI;
+import java.nio.file.*;
+import java.nio.file.attribute.DosFileAttributes;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public class CurrencyParser {
 
@@ -21,8 +23,25 @@ public class CurrencyParser {
         File dir = new File(event.getModConfigurationDirectory(), "moneyworks");
 
         if (!dir.exists()) {
-            dir = new File(event.getModConfigurationDirectory(), "moneyworks");
             dir.mkdir();
+        }
+
+        File dir2 = new File(dir, "resources");
+
+        if (!dir2.exists()) {
+            dir2.mkdir();
+        }
+
+        File dir3 = new File(dir2, "textures/items");
+
+        if (!dir3.exists()) {
+            dir3.mkdirs();
+        }
+
+        File dir4 = new File(dir2, "lang");
+
+        if (!dir4.exists()) {
+            dir4.mkdir();
         }
 
         File json = new File(dir, "pack.json");
@@ -59,10 +78,13 @@ public class CurrencyParser {
             writer.flush();
             writer.close();
         }
+
+        Moneyworks.proxy.addResourcePack(Moneyworks.preevent);
+        Moneyworks.proxy.refreshResources();
     }
 
-    public static List<Currency> parse(FMLPreInitializationEvent event) throws IOException {
-        List<Currency> currencies = new ArrayList<Currency>();
+    public static Currency parse(FMLPreInitializationEvent event) throws IOException {
+        Currency returnCurrency = null;
 
         initDir(event);
 
@@ -73,21 +95,47 @@ public class CurrencyParser {
             String type = (json.getName().split("\\."))[1];
 
             if (name.equals("pack") && type.equals("json")) {
-                System.out.println("This is a json file.");
-
                 JsonReader reader = new JsonReader(new FileReader(json));
-                JsonObject object = new JsonObject();
                 Currency currency = new Gson().fromJson(reader, Currency.class);
 
-                System.out.println(currency);
                 if (currency != null) {
-                    currencies.add(currency);
+                    returnCurrency = currency;
                 }
             }
         }
 
-        if (!currencies.isEmpty()) {
-            return currencies;
+        File resources = new File(event.getModConfigurationDirectory(), "moneyworks/resources/models/item");
+
+        if (resources.exists()) {
+            resources.delete();
+        }
+
+        resources.mkdirs();
+
+        if (returnCurrency != null) {
+            for (String name : returnCurrency.getDenominations().keySet()) {
+                json = new File(resources, name + ".json");
+                json.createNewFile();
+
+                MoneyModel model = new MoneyModel("item/generated", new Location("moneyworks:items/" + name));
+
+                String jsonString = new Gson().toJson(model, MoneyModel.class);
+
+                JsonParser parser = new JsonParser();
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+                JsonElement el = parser.parse(jsonString);
+                jsonString = gson.toJson(el);
+
+                FileWriter writer = new FileWriter(json);
+                writer.write(jsonString);
+                writer.flush();
+                writer.close();
+            }
+
+            Moneyworks.proxy.refreshResources();
+
+            return returnCurrency;
         }
         return null;
     }

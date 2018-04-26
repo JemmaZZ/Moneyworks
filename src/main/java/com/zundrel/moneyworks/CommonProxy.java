@@ -31,4 +31,12 @@ public class CommonProxy {
         return ctx.getServerHandler().player;
     }
 
+    public void refreshResources() {
+
+    }
+
+    public void addResourcePack(FMLPreInitializationEvent event) {
+
+    }
+
 }

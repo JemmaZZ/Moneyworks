@@ -1,10 +1,15 @@
 package com.zundrel.moneyworks.client;
 
 import com.zundrel.moneyworks.CommonProxy;
+import com.zundrel.moneyworks.api.MoneyworksResourcePack;
 import com.zundrel.moneyworks.init.CurrencyBlocks;
+import com.zundrel.moneyworks.init.CurrencyItems;
+import com.zundrel.moneyworks.items.ItemMoney;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.FolderResourcePack;
+import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +20,10 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import java.io.File;
+import java.util.List;
 
 public class ClientProxy extends CommonProxy {
 
@@ -38,9 +47,29 @@ public class ClientProxy extends CommonProxy {
         return ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx);
     }
 
+    @Override
+    public void refreshResources() {
+        Minecraft.getMinecraft().refreshResources();
+    }
+
+    @Override
+    public void addResourcePack(FMLPreInitializationEvent event) {
+        File dir = new File(event.getModConfigurationDirectory(), "moneyworks/resources");
+
+        List<IResourcePack> defaultResourcePacks = null;
+
+        defaultResourcePacks = ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "defaultResourcePacks");
+
+        defaultResourcePacks.add(new MoneyworksResourcePack());
+    }
+
     @SubscribeEvent
     public void onModelRegister(ModelRegistryEvent event) {
         addModel(CurrencyBlocks.atm, 0, "inventory");
+
+        for (ItemMoney money : CurrencyItems.money.values()) {
+            addModel(money, 0, "inventory");
+        }
     }
 
     private void addModel(Block block, int meta, String name) {
