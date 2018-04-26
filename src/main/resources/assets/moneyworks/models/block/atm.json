@@ -1,0 +1,115 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"parent": "block/block",
+	"textures": {
+		"0": "moneyworks:blocks/side",
+		"1": "moneyworks:blocks/top",
+		"2": "moneyworks:blocks/screen",
+		"3": "moneyworks:blocks/inside",
+		"4": "moneyworks:blocks/atm",
+		"particle": "moneyworks:blocks/side"
+	},
+	"elements": [
+		{
+			"name": "Roof",
+			"from": [1, 14, 0],
+			"to": [15, 16, 15],
+			"faces": {
+				"north": {
+					"uv": [1, 0, 15, 2],
+					"texture": "#1"
+				},
+				"up": {
+					"uv": [1, 0, 15, 15],
+					"texture": "#1"
+				},
+				"down": {
+					"uv": [1, 0, 15, 15],
+					"texture": "#3"
+				}
+			}
+		},
+		{
+			"name": "Wall",
+			"from": [0, 6, 0],
+			"to": [1, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 10], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 10], "texture": "#3"},
+				"south": {"uv": [0, 0, 1, 10], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 10], "texture": "#0"},
+				"up": {"uv": [0, 0, 1, 16], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Wall",
+			"from": [15, 6, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 10], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 10], "texture": "#0"},
+				"south": {"uv": [0, 0, 1, 10], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 10], "texture": "#3"},
+				"up": {"uv": [0, 0, 1, 16], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Wall",
+			"from": [1, 6, 15],
+			"to": [15, 16, 16],
+			"faces": {
+				"south": {"uv": [1, 0, 15, 10], "texture": "#0"},
+				"up": {"uv": [0, 0, 14, 1], "texture": "#1"}
+			}
+		},
+		{
+			"name": "Base",
+			"from": [0, 0, 0],
+			"to": [16, 6, 16],
+			"faces": {
+				"north": {"uv": [0, 10, 16, 16], "texture": "#0"},
+				"east": {"uv": [0, 10, 16, 16], "texture": "#0"},
+				"south": {"uv": [0, 10, 16, 16], "texture": "#0"},
+				"west": {"uv": [0, 10, 16, 16], "texture": "#0"},
+				"up": {
+					"uv": [0, 0, 16, 16],
+					"texture": "#2",
+					"rotation": 180
+				},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Screen",
+			"from": [1, 5.75, 5],
+			"to": [15, 15.75, 6],
+			"rotation": {
+				"angle": 22.5,
+				"axis": "x",
+				"origin": [16.5, 6.5, 5.5]
+			},
+			"faces": {
+				"north": {"uv": [1, 0, 15, 10], "texture": "#2"}
+			}
+		},
+		{
+			"name": "Logo",
+			"from": [6, 14.25, -0.01],
+			"to": [10, 15.75, -0.01],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#4"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "Casing",
+			"isOpen": false,
+			"shade": true,
+			"display": {"visibility": true, "autouv": true},
+			"children": [0, 1, 2, 3, 4]
+		},
+		5,
+		6
+	]
+}

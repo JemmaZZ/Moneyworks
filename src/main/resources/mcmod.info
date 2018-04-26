@@ -1,0 +1,20 @@
+[
+  {
+    "modid": "neverenoughcurrency",
+    "name": "Never Enough Currency",
+    "description": "A mod focusing around the usage and capabilities of currency.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "zundrel.com",
+    "updateUrl": "",
+    "authorList": [
+      "Zundrel"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": [
+      ""
+    ]
+  }
+]
